@@ -7,8 +7,6 @@ import (
 	"log"
 	"os"
 
-	// "hash/fnv"
-
 	"github.com/urfave/cli"
 	"path/filepath"
 )

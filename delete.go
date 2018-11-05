@@ -23,20 +23,13 @@ func deleteAction(c *cli.Context) error {
 	} else {
 		if c.NArg() > 0 {
 			for _, n := range c.Args() {
-				intNum, err := strconv.Atoi(n) //TODO: Fix so it fits into design patters
+				intNum, err := strconv.Atoi(n)
 				panicErr(err, "unable to convert to int")
 				toDelete = append(toDelete, intNum)
 			}
 			notes := []string{}
-			categories, err := ioutil.ReadDir(notesPath)
-			panicErr(err, "unable to read path")
-
-			for _, folder := range categories {
-				if folder.IsDir() {
-					listNotesDir(&notes, filepath.Join(notesPath, folder.Name()))
-				}
-			}
-
+			err := filepath.Walk(notesPath, getAppendWalkFunction(&notes))
+			panicErr(err, "Error when deleting note")
 			for _, n := range toDelete {
 				notePath := notes[n]
 				fmt.Println("Deleting", notePath)
@@ -49,15 +42,4 @@ func deleteAction(c *cli.Context) error {
 		}
 	}
 	return nil
-}
-
-func listNotesDir(noteList *[]string, fp string) {
-	files, err := ioutil.ReadDir(fp)
-	panicErr(err, "no folder exisist")
-	for _, note := range files {
-		if filepath.Ext(note.Name()) == ".note" {
-			filePath := filepath.Join(fp, note.Name())
-			*noteList = append(*noteList, filePath)
-		}
-	}
 }
