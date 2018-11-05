@@ -32,4 +32,4 @@ notes
 * `go-note l / list [-c/--category "category"]`
 * `go-note rm / remove/ id [-c/--category "category"]`
 * `go-note mv / move/ id category`
-* `go-note -h / --help```
+* `go-note -h / --help`
