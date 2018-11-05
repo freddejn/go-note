@@ -1,4 +1,4 @@
-# Small command line application to store notes
+# Small command line application for note taking
 
 # Installation
    * Download run `go install` and put binary in `$PATH`
@@ -12,6 +12,7 @@ All notes and will be put into `$NOTES_PATH`
 - [ ] Make so that notes can be added just by typing go-note "note"
 - [ ] Fix error handling
 - [ ] Fix so that categories can be created
+- [ ] Make notes editable with editor of choice
 
 ```
 notes
