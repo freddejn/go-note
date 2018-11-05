@@ -1,7 +1,7 @@
 # Small command line application for note taking
 
 # Installation
-   * Download run `go install` and put binary in `$PATH`
+   * Download repo, unzip to $GOPATH run `go install` and put binary in `$PATH`
    * Add export `NOTES_DIR=path_to_where_you_want_your_notes_to_be in your zshrc/bashrc`
    * run using go-note
     
