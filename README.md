@@ -11,7 +11,9 @@ All notes and will be put into `$NOTES_PATH`
 
 ## TODO
 
-- [] Make so that notes can be added just by typing go-note "note"
+- [ ] Make so that notes can be added just by typing go-note "note"
+- [ ] Fix error handling
+- [ ] Fix so that categories can be created
 
 ```
 notes
