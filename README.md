@@ -1,12 +1,10 @@
 # Small command line application to store notes
 
-
 # Installation
-
-    * Download run `go install` and put binary in `$PATH`
-    * Add export `NOTES_DIR=path_to_where_you_want_your_notes_to_be in your zshrc/bashrc`
-    * run using go-note
-
+   * Download run `go install` and put binary in `$PATH`
+   * Add export `NOTES_DIR=path_to_where_you_want_your_notes_to_be in your zshrc/bashrc`
+   * run using go-note
+    
 All notes and will be put into `$NOTES_PATH`
 
 ## TODO
