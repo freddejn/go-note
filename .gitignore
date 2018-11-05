@@ -1,0 +1,3 @@
+*.pdf
+*_test.go
+.DS_Store
