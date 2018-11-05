@@ -16,15 +16,7 @@ import (
 
 var boldUnderline = color.New(color.Bold, color.Underline).SprintFunc()
 var bold = color.New(color.Bold).SprintFunc()
-
-var directoryFlag = cli.StringFlag{
-	Name:   "dir, d",
-	Usage:  "path",
-	EnvVar: "NOTES_DIR",
-}
-
 var NotesPath = os.Getenv("NOTES_DIR")
-
 var categoryFlag = cli.StringFlag{
 	Name:  "category, c",
 	Usage: "category",
@@ -44,7 +36,6 @@ func main() {
 			ArgsUsage:   "number",
 			Description: "space separated list of notes to delete",
 			Flags: []cli.Flag{
-				directoryFlag,
 				categoryFlag,
 			},
 			Action: deleteAction,
@@ -56,7 +47,6 @@ func main() {
 			Description: "list all (default) or by category",
 			Aliases:     []string{"l", "ls"},
 			Flags: []cli.Flag{
-				directoryFlag,
 				categoryFlag,
 			},
 			Action: listAction,
@@ -67,7 +57,6 @@ func main() {
 			Usage:       "add a note",
 			Description: "Add note or add to category (defaults to General)",
 			Flags: []cli.Flag{
-				directoryFlag,
 				categoryFlag,
 			},
 			Action: addAction,
@@ -78,7 +67,6 @@ func main() {
 			Usage:       "move note to new category",
 			Description: "select notes not move",
 			Flags: []cli.Flag{
-				directoryFlag,
 				categoryFlag,
 			}, Action: moveAction,
 		},
@@ -94,7 +82,6 @@ func main() {
 
 	err := app.Run(os.Args)
 	panicErr(err, "")
-
 }
 
 func panicErr(e error, mess string) {
@@ -109,7 +96,7 @@ func getPrintWalkFunction(extension string) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && path != NotesPath {
 			fmt.Printf("\n%s\n", boldUnderline(info.Name()))
-			fmt.Println(bold("    n                    Created  Note")) //TODO: Fix formatting
+			fmt.Print(bold("    n" + strings.Repeat(" ", 20) + "Created  Note\n")) //TODO: Fix formatting
 		}
 		if filepath.Ext(path) == ".note" {
 			note, err := ioutil.ReadFile(path)

@@ -17,7 +17,7 @@ func addAction(c *cli.Context) error {
 		if category == "" {
 			category = "General"
 		}
-		savePath := filepath.Join(c.String("dir"), category)
+		savePath := filepath.Join(NotesPath, category)
 		err := os.MkdirAll(savePath, os.ModePerm)
 		panicErr(err, "path exists") //TODO: Handle err
 		note := c.Args().First()
@@ -35,6 +35,11 @@ func addAction(c *cli.Context) error {
 		panicErr(err, "")
 		fmt.Printf("Adding note %q to path: %s\n", note, savePath)
 		return nil
+	} else { // If no arguments but flag create category path
+		category := c.String("category")
+		savePath := filepath.Join(c.String("dir"), category)
+		err := os.MkdirAll(savePath, os.ModePerm)
+		panicErr(err, "Unable to create category")
 	}
 	return nil
 }
