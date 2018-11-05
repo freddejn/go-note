@@ -18,11 +18,9 @@ func addAction(c *cli.Context) error {
 			category = "General"
 		}
 		savePath := filepath.Join(c.String("dir"), category)
-		fmt.Println(savePath)
 		err := os.MkdirAll(savePath, os.ModePerm)
 		panicErr(err, "path exists") //TODO: Handle err
 		note := c.Args().First()
-		fmt.Println(category)
 		var filename string
 		if len(note) >= 14 {
 			filename = sanitize(note[0:14]) + "..."
