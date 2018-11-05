@@ -1,9 +1,12 @@
 # Small command line application to store notes
 
-## Interface
+# TODO
 
-go-note / Creates a new note
-go-note -l / --list             # list all notes
-go-note -d / --delete "number"  # delete note number
-go-note -f / --find             # fuzzy search for note
-go-note -h / --help             # show help page
+# Interface
+
+* ``` note / Creates a new note ``` 
+* ```note l / list [-c/--category "category"]```
+* ```note rm / remove/ "note id [-c/--category "category"]"```
+* ```note mv / move/ id category```
+* ```note a / add "note" [-c/--category "category"]```
+* ```note -h / --help```
