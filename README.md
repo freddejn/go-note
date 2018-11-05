@@ -1,17 +1,18 @@
-# Small command line application to store notes
-
+# Small command line application for note taking
 
 # Installation
-
-    * Download run `go install` and put binary in `$PATH`
-    * Add export `NOTES_DIR=path_to_where_you_want_your_notes_to_be in your zshrc/bashrc`
-    * run using go-note
-
+   * Download repo, unzip to `$GOPATH run `go install` and put binary in `$PATH`
+   * Add export `NOTES_DIR=path_to_where_you_want_your_notes_to_be in your zshrc/bashrc`
+   * run using go-note
+    
 All notes and will be put into `$NOTES_PATH`
 
 ## TODO
 
-- [] Make so that notes can be added just by typing go-note "note"
+- [ ] Make so that notes can be added just by typing go-note "note"
+- [ ] Fix error handling
+- [ ] Fix so that categories can be created
+- [ ] Make notes editable with editor of choice
 
 ```
 notes
@@ -30,4 +31,4 @@ notes
 * `go-note l / list [-c/--category "category"]`
 * `go-note rm / remove/ id [-c/--category "category"]`
 * `go-note mv / move/ id category`
-* `go-note -h / --help```
+* `go-note -h / --help`
