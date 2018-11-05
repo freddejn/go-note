@@ -9,6 +9,10 @@
 
 All notes and will be put into `$NOTES_PATH`
 
+## TODO
+
+- [] Make so that notes can be added just by typing go-note "note"
+
 ```
 notes
 |-- Category1
@@ -22,8 +26,8 @@ notes
 
 # Interface
 
-* `note a / add "note" [-c/--category "category"]`
-* `note l / list [-c/--category "category"]`
-* `note rm / remove/ id [-c/--category "category"]`
-* `note mv / move/ id category`
-* `note -h / --help```
+* `go-note a / add "note" [-c/--category "category"]`
+* `go-note l / list [-c/--category "category"]`
+* `go-note rm / remove/ id [-c/--category "category"]`
+* `go-note mv / move/ id category`
+* `go-note -h / --help```
