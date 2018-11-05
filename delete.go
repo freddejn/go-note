@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -19,7 +18,6 @@ func deleteAction(c *cli.Context) error {
 		err := os.RemoveAll(folderToDelete)
 		panicErr(err, "unable to delete category")
 		fmt.Printf("Removed category: %s\n", category)
-
 	} else {
 		if c.NArg() > 0 {
 			for _, n := range c.Args() {

@@ -2,13 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/fatih/color"
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
+
+	"github.com/fatih/color"
+
+	"path/filepath"
 
 	"github.com/urfave/cli"
-	"path/filepath"
 )
 
 var boldUnderline = color.New(color.Bold, color.Underline).SprintFunc()
@@ -20,7 +23,7 @@ var directoryFlag = cli.StringFlag{
 	EnvVar: "NOTES_DIR",
 }
 
-var notesPath = os.Getenv("NOTES_DIR")
+var NotesPath = os.Getenv("NOTES_DIR")
 
 var categoryFlag = cli.StringFlag{
 	Name:  "category, c",
@@ -36,7 +39,7 @@ func main() {
 		{
 			Name:        "remove",
 			Aliases:     []string{"rm"},
-			Usage:       "Delete a note by note number.",
+			Usage:       "Delete a note",
 			HelpName:    "delete",
 			ArgsUsage:   "number",
 			Description: "space separated list of notes to delete",
@@ -48,9 +51,10 @@ func main() {
 		},
 		{
 
-			Name:    "list",
-			Usage:   "list all notes",
-			Aliases: []string{"l", "ls"},
+			Name:        "list",
+			Usage:       "list notes",
+			Description: "list all (default) or by category",
+			Aliases:     []string{"l", "ls"},
 			Flags: []cli.Flag{
 				directoryFlag,
 				categoryFlag,
@@ -58,21 +62,34 @@ func main() {
 			Action: listAction,
 		},
 		{
-			Name:    "add",
-			Aliases: []string{"a"},
-			Usage:   "add a note",
+			Name:        "add",
+			Aliases:     []string{"a"},
+			Usage:       "add a note",
+			Description: "Add note or add to category (defaults to General)",
 			Flags: []cli.Flag{
 				directoryFlag,
 				categoryFlag,
 			},
 			Action: addAction,
 		},
-		{Name: "move",
-			Aliases: []string{"mv"},
+		{
+			Name:        "move",
+			Aliases:     []string{"mv"},
+			Usage:       "move note to new category",
+			Description: "select notes not move",
 			Flags: []cli.Flag{
 				directoryFlag,
 				categoryFlag,
-			}, Action: moveAction},
+			}, Action: moveAction,
+		},
+
+		{
+			Name:        "edit",
+			Aliases:     []string{"e"},
+			Usage:       "edit a note",
+			Description: "select note to edit",
+			Action:      editAction,
+		},
 	}
 
 	err := app.Run(os.Args)
@@ -86,17 +103,11 @@ func panicErr(e error, mess string) {
 	}
 }
 
-// func hash(s string) uint32 {
-// 	h := fnv.New32a()
-// 	h.Write([]byte(s))
-// 	return h.Sum32()
-// }
-
 // Printing output of all notes
 func getPrintWalkFunction(extension string) filepath.WalkFunc {
 	n := 0
 	return func(path string, info os.FileInfo, err error) error {
-		if info.IsDir() && path != notesPath {
+		if info.IsDir() && path != NotesPath {
 			fmt.Printf("\n%s\n", boldUnderline(info.Name()))
 			fmt.Println(bold("    n                    Created  Note")) //TODO: Fix formatting
 		}
@@ -104,7 +115,7 @@ func getPrintWalkFunction(extension string) filepath.WalkFunc {
 			note, err := ioutil.ReadFile(path)
 			panicErr(err, "unable to read file")
 			created := info.ModTime().Format("2006-01-02 15:04")
-			fmt.Printf("    %d  %s  %s\n", n, created, string(note)) //
+			fmt.Printf("    %d  %s  %s\n", n, created, strings.TrimSuffix(string(note), "\n")) //
 			n++
 		}
 		return nil
