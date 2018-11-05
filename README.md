@@ -12,7 +12,7 @@ All notes and will be put into `$NOTES_PATH`
 - [ ] Make so that notes can be added just by typing go-note "note"
 - [ ] Fix error handling
 - [ ] Fix so that categories can be created
-- [ ] Make notes editable with editor of choice
+- [x] Make notes editable with editor of choice
 
 ```
 notes
