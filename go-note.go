@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 
@@ -65,7 +66,7 @@ func main() {
 			Name:        "move",
 			Aliases:     []string{"mv"},
 			Usage:       "move note to new category",
-			Description: "select notes not move",
+			Description: "select notes to move",
 			Flags: []cli.Flag{
 				categoryFlag,
 			}, Action: moveAction,
@@ -78,31 +79,39 @@ func main() {
 			Description: "select note to edit",
 			Action:      editAction,
 		},
+		{
+			Name:        "find",
+			Aliases:     []string{"f"},
+			Usage:       "find a note by pattern match",
+			Description: "use regex to filter notes",
+			Action:      findAction,
+		},
 	}
 
 	err := app.Run(os.Args)
-	panicErr(err, "")
+	printErr(err, "")
 }
 
-func panicErr(e error, mess string) {
+func printErr(e error, mess string) {
 	if e != nil {
 		log.Fatal(mess)
 	}
 }
 
-// Printing output of all notes
+// Printing output of all notes TODO: Check if this should take a *[]note
 func getPrintWalkFunction(extension string) filepath.WalkFunc {
 	n := 0
 	return func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && path != NotesPath {
 			fmt.Printf("\n%s\n", boldUnderline(info.Name()))
-			fmt.Print(bold("    n" + strings.Repeat(" ", 20) + "Created  Note\n")) //TODO: Fix formatting
+			//TODO: Fix formatting
+			fmt.Print(bold("    n" + strings.Repeat(" ", 20) + "Created  Note\n"))
 		}
 		if filepath.Ext(path) == ".note" {
-			note, err := ioutil.ReadFile(path)
-			panicErr(err, "unable to read file")
+			noteText, err := ioutil.ReadFile(path)
+			printErr(err, "unable to read file")
 			created := info.ModTime().Format("2006-01-02 15:04")
-			fmt.Printf("    %d  %s  %s\n", n, created, strings.TrimSuffix(string(note), "\n")) //
+			fmt.Printf("    %d  %s  %s\n", n, created, strings.TrimSuffix(string(noteText), "\n")) //
 			n++
 		}
 		return nil
@@ -115,5 +124,51 @@ func getAppendWalkFunction(filepathList *[]string) filepath.WalkFunc {
 			*filepathList = append(*filepathList, path)
 		}
 		return nil
+	}
+}
+
+// TODO: Remove code repetition from getPrintWalkFunction
+func getAppendStructWalkFunction(noteList *[]note) filepath.WalkFunc {
+	id := 0
+	return func(path string, info os.FileInfo, err error) error {
+		id++
+		if filepath.Ext(path) == ".note" {
+			text, err := ioutil.ReadFile(path)
+			printErr(err, "Unable to read file")
+			created := info.ModTime()
+			category := filepath.Base(filepath.Dir(path))
+			not := note{
+				id:       id,
+				path:     path,
+				text:     text,
+				created:  created,
+				category: category,
+			}
+			*noteList = append(*noteList, not)
+		}
+		return nil
+	}
+}
+
+type note struct {
+	id       int
+	path     string
+	text     []byte
+	created  time.Time
+	category string
+}
+
+// Common print function, prints a list of []note. TODO: Make common for all
+// prints.
+func printNoteList(noteList []note) {
+	cat := ""
+	for _, nt := range noteList {
+		if nt.category != cat {
+			fmt.Printf("\n%s\n", boldUnderline(nt.category))
+			fmt.Printf("    %v  %v           %v\n", bold("n"), bold("Created"), bold("Note"))
+			cat = nt.category
+		}
+		created := nt.created.Format("2006-01-02 15:04")
+		fmt.Printf("%5d  %s  %s\n", nt.id, created, string(nt.text))
 	}
 }

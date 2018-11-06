@@ -19,7 +19,7 @@ func addAction(c *cli.Context) error {
 		}
 		savePath := filepath.Join(NotesPath, category)
 		err := os.MkdirAll(savePath, os.ModePerm)
-		panicErr(err, "path exists") //TODO: Handle err
+		printErr(err, "path exists") //TODO: Handle err
 		note := c.Args().First()
 		var filename string
 		if len(note) >= 14 {
@@ -28,18 +28,18 @@ func addAction(c *cli.Context) error {
 			filename = sanitize(note)
 		}
 		createTime := time.Now().Format("060102150405.0000")
-		panicErr(err, "unable to read from folder")
+		printErr(err, "unable to read from folder")
 		filePath := filepath.Join(savePath, createTime+"_"+filename+"_.note")
 		err = ioutil.WriteFile(filePath, []byte(note), 0644)
-		panicErr(err, "Filewrite err") //TODO: check err
-		panicErr(err, "")
+		printErr(err, "Filewrite err") //TODO: check err
+		printErr(err, "")
 		fmt.Printf("Adding note %q to path: %s\n", note, savePath)
 		return nil
 	} else { // If no arguments but flag create category path
 		category := c.String("category")
 		savePath := filepath.Join(c.String("dir"), category)
 		err := os.MkdirAll(savePath, os.ModePerm)
-		panicErr(err, "Unable to create category")
+		printErr(err, "Unable to create category")
 	}
 	return nil
 }
