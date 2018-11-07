@@ -13,7 +13,6 @@ import (
 func findAction(c *cli.Context) error {
 	notes := []note{}
 	// filtered = make(map[string]int)
-	fmt.Println(c.Args())
 	err := filepath.Walk(NotesPath, getAppendStructWalkFunction(&notes))
 	printErr(err, "Error when parsing")
 	filtered := []note{}
